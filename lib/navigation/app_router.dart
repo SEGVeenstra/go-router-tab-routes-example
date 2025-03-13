@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_router_tab_routes_example/main.dart';
 import 'package:go_router_tab_routes_example/ui/home_page.dart';
-import 'package:go_router_tab_routes_example/ui/items_page.dart';
 import 'package:go_router_tab_routes_example/ui/root_page.dart';
+import 'package:go_router_tab_routes_example/ui/tabbed_page.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -20,8 +21,12 @@ class AppRouter extends GoRouter {
     go('/');
   }
 
-  void goToItems(String? tab) {
-    go('/items?tab=$tab');
+  void goToQueryParams(String? tab) {
+    go('/query-params?tab=$tab');
+  }
+
+  void goToPathParams(String? tab) {
+    go('/path-params/$tab');
   }
 
   static AppRouter of(BuildContext context) {
@@ -50,11 +55,34 @@ final _routes = [
       StatefulShellBranch(
         routes: [
           GoRoute(
-            path: '/items',
+            path: '/query-params',
             builder: (context, state) {
               final tab = state.uri.queryParameters['tab'];
-              return ItemsPage(
+              return TabbedPage(
+                title: 'Query Params',
                 tab: tab,
+                onTabTapped: (value) => AppRouter.of(context).goToQueryParams(tabs[value]),
+              );
+            },
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        routes: [
+          // IMPORTANT! This route is needed to redirect to the first tab
+          // because a path with path-param is not allowed as first route!
+          GoRoute(
+            path: '/path-params',
+            redirect: (context, state) => '/path-params/${tabs.first}',
+          ),
+          GoRoute(
+            path: '/path-params/:tab',
+            builder: (context, state) {
+              final tab = state.pathParameters['tab'];
+              return TabbedPage(
+                title: 'Path Params',
+                tab: tab,
+                onTabTapped: (value) => AppRouter.of(context).goToPathParams(tabs[value]),
               );
             },
           ),

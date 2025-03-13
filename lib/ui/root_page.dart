@@ -25,8 +25,12 @@ class RootPage extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Items',
+            icon: Icon(Icons.query_stats),
+            label: 'Query',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.route),
+            label: 'Path',
           ),
         ],
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ContentTab extends StatelessWidget {
-  const ContentTab({
+class TabContent extends StatelessWidget {
+  const TabContent({
     super.key,
     required this.tabName,
   });
