@@ -37,7 +37,7 @@ class _TabbedPageState extends State<TabbedPage> with SingleTickerProviderStateM
     // to the widget.
     _tabController.addListener(
       () {
-        if (_tabController.index != _tabController.previousIndex) {
+        if (!_tabController.indexIsChanging && _tabController.index != _tabController.previousIndex) {
           widget.onTabChanged(_tabController.index);
         }
       },
@@ -50,7 +50,9 @@ class _TabbedPageState extends State<TabbedPage> with SingleTickerProviderStateM
   void didUpdateWidget(covariant TabbedPage oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _tabController.index = (tabs.indexOf(widget.tab ?? tabs.first));
+    if (oldWidget.tab != widget.tab) {
+      _tabController.animateTo(tabs.indexOf(widget.tab ?? tabs.first));
+    }
   }
 
   @override
