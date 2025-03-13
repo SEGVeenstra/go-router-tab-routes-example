@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:go_router_tab_routes_example/analytics/app_analytics.dart';
+import 'package:go_router_tab_routes_example/app.dart';
+import 'package:go_router_tab_routes_example/navigation/app_router.dart';
+
+final tabs = ['Tab 1', 'Tab 2', 'Tab 3'];
 
 void main() {
-  runApp(const MainApp());
-}
+  final router = AppRouter();
+  AppAnalytics.init(router);
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  router.routerDelegate.addListener(
+    () {
+      AppAnalytics().logPageView();
+    },
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  runApp(
+    App(
+      router: router,
+    ),
+  );
 }
