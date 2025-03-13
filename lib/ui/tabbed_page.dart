@@ -7,18 +7,24 @@ class TabbedPage extends StatefulWidget {
     super.key,
     required this.title,
     required this.tab,
-    required this.onTabTapped,
+    required this.onTabChanged,
   });
 
   final String title;
+
+  // NOTE: This is the tab that is currently selected.
   final String? tab;
-  final void Function(int tabIndex) onTabTapped;
+
+  // NOTE: This is the callback that is called when a tab is tapped.
+  final void Function(int tabIndex) onTabChanged;
 
   @override
   State<TabbedPage> createState() => _TabbedPageState();
 }
 
 class _TabbedPageState extends State<TabbedPage> with SingleTickerProviderStateMixin {
+  // NOTE: We create a TabController so we have more control over the tabs then when we would
+  // have if we would use the DefaultTabController widget.
   late final _tabController = TabController(length: tabs.length, vsync: this);
 
   @override
@@ -26,8 +32,20 @@ class _TabbedPageState extends State<TabbedPage> with SingleTickerProviderStateM
     super.initState();
 
     _tabController.index = (tabs.indexOf(widget.tab ?? tabs.first));
+
+    // NOTE: We add a listener to the controller in which we trigger the callback that was passed
+    // to the widget.
+    _tabController.addListener(
+      () {
+        if (_tabController.index != _tabController.previousIndex) {
+          widget.onTabChanged(_tabController.index);
+        }
+      },
+    );
   }
 
+  // NOTE: When the widget is update with the new tab by GoRouter, we need to reflect that
+  // in the TabController.
   @override
   void didUpdateWidget(covariant TabbedPage oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -42,7 +60,6 @@ class _TabbedPageState extends State<TabbedPage> with SingleTickerProviderStateM
         title: Text(widget.title),
         bottom: TabBar(
           controller: _tabController,
-          onTap: widget.onTabTapped,
           tabs: [
             for (final tab in tabs) Tab(text: tab),
           ],

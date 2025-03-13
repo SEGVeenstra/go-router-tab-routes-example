@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AppAnalytics {
@@ -14,6 +15,8 @@ class AppAnalytics {
 
   void logPageView() {
     final uri = router.state.uri;
-    Future.delayed(Duration.zero, () => print('Page view: $uri'));
+
+    debugPrint('[ANALYTICS] Path: $uri');
+    debugPrint('[ANALYTICS] Page Name: ${router.routerDelegate.currentConfiguration.last.route.name}');
   }
 }

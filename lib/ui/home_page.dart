@@ -15,6 +15,9 @@ class HomePage extends StatelessWidget {
           child: Text('Deeplinks into specific tabs:'),
         ),
       ),
+      // NOTE: Here we create a list of deeplinks.
+      // Now that GoRouter is in charge of the navigation inside the tabs we can
+      // use the GoRouter to deeplink to the tabs.
       body: ListView.builder(
           itemCount: tabs.length * 2,
           itemBuilder: (context, index) => index < tabs.length
